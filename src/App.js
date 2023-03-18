@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import { Header, Main } from "./components";
+import { getBlogPosts } from "./services";
 
-function App() {
+import CssBaseline from "@mui/material/CssBaseline";
+import Container from "@mui/material/Container";
+import { red } from "@mui/material/colors";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: red[500],
+    },
+  },
+});
+
+const App = () => {
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  // componentDidMount
+  useEffect(() => {
+    getBlogPosts().then((blogPosts) => setBlogPosts(blogPosts));
+  }, []);
+
+  // componentWillDismount
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Header />
+      <CssBaseline />
+      <Container maxWidth="lg">
+        <Main blogPosts={blogPosts} />
+      </Container>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
